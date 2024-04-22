@@ -1,8 +1,11 @@
 package service
 
 import (
+	"com.github.alissonbk/go-rest-template/app/constant"
+	"com.github.alissonbk/go-rest-template/app/exception"
 	"com.github.alissonbk/go-rest-template/app/model/entity"
 	"com.github.alissonbk/go-rest-template/app/repository"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService struct {
@@ -18,6 +21,11 @@ func (s *UserService) GetAll() []entity.User {
 }
 
 func (s *UserService) Save(user entity.User) entity.User {
+	encryptedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), 12)
+	if err != nil {
+		exception.PanicException(constant.UnknownError, "Could not encrypt the password")
+	}
+	user.Password = encryptedPassword
 	savedUser := s.repository.Save(&user)
 	return savedUser
 }

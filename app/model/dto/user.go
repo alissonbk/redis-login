@@ -14,6 +14,6 @@ func (dto UserDTO) ToEntity() entity.User {
 	return entity.User{
 		Name:     dto.Name,
 		Email:    dto.Email,
-		Password: dto.Password,
+		Password: []byte(dto.Password),
 	}
 }

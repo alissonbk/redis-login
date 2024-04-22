@@ -15,6 +15,7 @@ func Init() *gin.Engine {
 	// DI
 	injection := NewInjection()
 	userController := injection.NewUserController()
+	authController := injection.NewAuthController()
 
 	router.GET("", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, dto.BuildResponse[any](constant.Success, "Hello", nil))
@@ -29,6 +30,8 @@ func Init() *gin.Engine {
 		user.PUT("/:userID", userController.Update)
 		user.DELETE("/:userID", userController.Delete)
 
+		login := api.Group("/login")
+		login.POST("", authController.Login)
 	}
 
 	return router

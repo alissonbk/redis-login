@@ -23,3 +23,9 @@ func (i *Injection) NewUserController() *controller.UserController {
 	s := service.NewUserService(r)
 	return controller.NewUserController(s)
 }
+
+func (i *Injection) NewAuthController() *controller.AuthController {
+	ur := repository.NewUserRepository(i.db)
+	s := service.NewAuthService(ur)
+	return controller.NewAuthController(s)
+}

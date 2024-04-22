@@ -78,6 +78,21 @@ func (u UserRepository) FindUserById(id int) entity.User {
 	return user
 }
 
+func (u UserRepository) FindUserByEmail(email string) entity.User {
+	user := entity.User{
+		Email: email,
+	}
+	tx := u.db.First(&user)
+	if tx.Error != nil {
+		if strings.Contains(tx.Error.Error(), "record not found") {
+			exception.PanicException(constant.DataNotFound, "Not found")
+		}
+		log.Error("Failed to find user by email. Error: ", tx.Error)
+		exception.PanicException(constant.DBQueryFailed, "")
+	}
+	return user
+}
+
 func (u UserRepository) DeleteUserById(id int) {
 	tx := u.db.Delete(&entity.User{}, id)
 
