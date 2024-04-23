@@ -1,10 +1,9 @@
-package router
+package config
 
 import (
 	"com.github.alissonbk/go-rest-template/app/controller"
 	"com.github.alissonbk/go-rest-template/app/repository"
 	"com.github.alissonbk/go-rest-template/app/service"
-	"com.github.alissonbk/go-rest-template/config"
 	"gorm.io/gorm"
 )
 
@@ -15,7 +14,7 @@ type Injection struct {
 }
 
 func NewInjection() *Injection {
-	return &Injection{db: config.ConnectDB()}
+	return &Injection{db: ConnectDB()}
 }
 
 func (i *Injection) NewUserController() *controller.UserController {
@@ -28,4 +27,9 @@ func (i *Injection) NewAuthController() *controller.AuthController {
 	ur := repository.NewUserRepository(i.db)
 	s := service.NewAuthService(ur)
 	return controller.NewAuthController(s)
+}
+
+func (i *Injection) NewAuthService() *service.AuthService {
+	ur := repository.NewUserRepository(i.db)
+	return service.NewAuthService(ur)
 }

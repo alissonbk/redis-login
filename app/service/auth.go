@@ -30,6 +30,7 @@ func NewAuthService(ur *repository.UserRepository) *AuthService {
 }
 
 func (as *AuthService) createToken(username string) (string, error) {
+
 	token := jwt.NewWithClaims(
 		jwt.SigningMethodHS256,
 		jwt.MapClaims{
@@ -46,19 +47,18 @@ func (as *AuthService) createToken(username string) (string, error) {
 	return tokenString, nil
 }
 
-func (as *AuthService) validateToken(tokenString string) error {
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+func (as *AuthService) ValidateTokenWithClaims(tokenString string) (*jwt.MapClaims, error) {
+	claims := &jwt.MapClaims{}
+	parsedToken, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 		return as.secretKey, nil
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
-
-	if !token.Valid {
-		return fmt.Errorf("invalid token")
+	if !parsedToken.Valid {
+		return nil, fmt.Errorf("invalid token")
 	}
-
-	return nil
+	return parsedToken.Claims.(*jwt.MapClaims), nil
 }
 
 func (as *AuthService) Login(username string, passwd string) string {
@@ -74,6 +74,5 @@ func (as *AuthService) Login(username string, passwd string) string {
 		logrus.Error(err)
 		exception.PanicException(constant.UnknownError, "could not create JWT token")
 	}
-
 	return tokenString
 }

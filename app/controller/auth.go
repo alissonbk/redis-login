@@ -31,3 +31,8 @@ func (ac *AuthController) Login(ctx *gin.Context) {
 	tokenString := ac.service.Login(loginDTO.Email, loginDTO.Password)
 	ctx.JSON(http.StatusOK, tokenString)
 }
+
+func (ac *AuthController) TestAuth(ctx *gin.Context) {
+	defer exception.PanicHandler(ctx)
+	ctx.JSON(http.StatusOK, map[string]string{"message": "ok"})
+}
