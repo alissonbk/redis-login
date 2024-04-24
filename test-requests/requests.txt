@@ -1,8 +1,0 @@
-curl -X POST -d "{\"username\": \"teste@teste.com\", \"password\": \"1234\"}" http://localhost:5000/api/v1/login
-
-
-curl -X GET http://localhost:5000/api/v1/login/test
-
-curl -X GET http://localhost:5000/api/v1/user
-
-curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTM5MDQ1NTksInVzZXJuYW1lIjoiIn0.XUNaksqomxK7Zk2sczCw6IQ07KUd0vltx3u5GUc46Ik" -X GET http://localhost:5000/api/v1/user

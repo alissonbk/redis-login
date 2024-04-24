@@ -21,11 +21,12 @@ func (s *UserService) GetAll() []entity.User {
 }
 
 func (s *UserService) Save(user entity.User) entity.User {
-	encryptedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), 12)
+	encryptedPassword, err := s.encryptPassword(user.Password)
 	if err != nil {
 		exception.PanicException(constant.UnknownError, "Could not encrypt the password")
 	}
 	user.Password = encryptedPassword
+	user.Role = "ROLE_TEST"
 	savedUser := s.repository.Save(&user)
 	return savedUser
 }
@@ -35,10 +36,19 @@ func (s *UserService) GetByID(id int) entity.User {
 	return user
 }
 
+func (s *UserService) GetByEmail(email string) entity.User {
+	user := s.repository.FindUserByEmail(email)
+	return user
+}
+
 func (s *UserService) Update(user entity.User) {
 	s.repository.Update(user)
 }
 
 func (s *UserService) Delete(id int) {
 	s.repository.DeleteUserById(id)
+}
+
+func (s *UserService) encryptPassword(passwd []byte) ([]byte, error) {
+	return bcrypt.GenerateFromPassword(passwd, 12)
 }

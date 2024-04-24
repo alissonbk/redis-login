@@ -33,3 +33,8 @@ func (i *Injection) NewAuthService() *service.AuthService {
 	ur := repository.NewUserRepository(i.db)
 	return service.NewAuthService(ur)
 }
+
+func (i *Injection) NewUserService() *service.UserService {
+	ur := repository.NewUserRepository(i.db)
+	return service.NewUserService(ur)
+}

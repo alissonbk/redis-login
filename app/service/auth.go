@@ -30,13 +30,15 @@ func NewAuthService(ur *repository.UserRepository) *AuthService {
 }
 
 func (as *AuthService) createToken(username string) (string, error) {
-
+	fmt.Println(username)
+	claims := jwt.MapClaims{
+		"username": username,
+		"exp":      time.Now().Add(time.Millisecond * time.Duration(as.jwtExpiration)).Unix(),
+	}
+	fmt.Println(claims)
 	token := jwt.NewWithClaims(
 		jwt.SigningMethodHS256,
-		jwt.MapClaims{
-			"username": username,
-			"exp":      time.Now().Add(time.Millisecond * time.Duration(as.jwtExpiration)).Unix(),
-		})
+		claims)
 
 	tokenString, err := token.SignedString(as.secretKey)
 	if err != nil {
@@ -69,7 +71,7 @@ func (as *AuthService) Login(username string, passwd string) string {
 		exception.PanicException(constant.Unauthorized, "user credentials are incorrect")
 	}
 
-	tokenString, err := as.createToken(username)
+	tokenString, err := as.createToken(user.Email)
 	if err != nil {
 		logrus.Error(err)
 		exception.PanicException(constant.UnknownError, "could not create JWT token")

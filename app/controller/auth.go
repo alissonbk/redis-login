@@ -5,6 +5,7 @@ import (
 	"com.github.alissonbk/go-rest-template/app/exception"
 	"com.github.alissonbk/go-rest-template/app/model/dto"
 	"com.github.alissonbk/go-rest-template/app/service"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"net/http"
@@ -34,5 +35,6 @@ func (ac *AuthController) Login(ctx *gin.Context) {
 
 func (ac *AuthController) TestAuth(ctx *gin.Context) {
 	defer exception.PanicHandler(ctx)
+	fmt.Println("Ctx user: ", ctx.Value("user"))
 	ctx.JSON(http.StatusOK, map[string]string{"message": "ok"})
 }

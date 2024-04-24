@@ -35,7 +35,10 @@ func Init() *gin.Engine {
 
 		login := api.Group("/login")
 		login.POST("", authController.Login)
-		login.GET("/test", authController.TestAuth)
+
+		test := api.Group("/test")
+		test.Use(middleware.AuthRequired(injection))
+		test.GET("", authController.TestAuth)
 	}
 
 	return router

@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"com.github.alissonbk/go-rest-template/config"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
@@ -10,9 +9,15 @@ import (
 
 func AuthRequired(i *config.Injection) gin.HandlerFunc {
 	authService := i.NewAuthService()
+	userService := i.NewUserService()
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		split := strings.Split(authHeader, " ")
+		if len(split) != 2 {
+			c.JSON(http.StatusUnauthorized, map[string]string{"message": "could not find token in the header"})
+			c.Abort()
+			return
+		}
 		token := split[1]
 		if split[0] != "Bearer" {
 			c.JSON(http.StatusUnauthorized, map[string]string{"message": "not a Bearer token"})
@@ -26,7 +31,9 @@ func AuthRequired(i *config.Injection) gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		// TODO: make claims return username and user role
-		fmt.Println("claims: ", claims)
+
+		email := (*claims)["username"].(string)
+		user := userService.GetByEmail(email)
+		c.Set("user", user)
 	}
 }
