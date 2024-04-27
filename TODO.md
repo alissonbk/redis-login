@@ -1,2 +1,1 @@
-### 
-    * Add version control for the database
+### fix redis context problem

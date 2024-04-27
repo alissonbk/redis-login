@@ -8,6 +8,7 @@ type UserDTO struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
+	Role     string `json:"role"`
 }
 
 func (dto UserDTO) ToEntity() entity.User {
@@ -15,5 +16,6 @@ func (dto UserDTO) ToEntity() entity.User {
 		Name:     dto.Name,
 		Email:    dto.Email,
 		Password: []byte(dto.Password),
+		Role:     dto.Role,
 	}
 }
