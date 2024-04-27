@@ -1,7 +1,9 @@
-curl -X POST -d "{\"username\": \"teste@teste.com\", \"password\": \"1234\"}" http://localhost:5000/api/v1/login
+curl -X POST -d "{\"username\": \"test@email.com\", \"password\": \"1234\"}" http://localhost:5000/api/v1/login
 
 curl -X GET http://localhost:5000/api/v1/login/test
 
 curl -X GET http://localhost:5000/api/v1/user
 
-curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTM5ODkzNzYsInJvbGUiOiJST0xFX1RFU1QiLCJ1c2VybmFtZSI6InRlc3RlQHRlc3RlLmNvbSJ9.hkNZ_VA5UFy0MwiGP4_BqzATHZI9Gn_jzA_WQmA_BKI" -X GET http://localhost:5000/api/v1/test
+curl -X POST -d " {\"name\": \"Test User\", \"email\": \"test@email.com\", \"password\": \"1234\"} " http://localhost:5000/api/v1/user
+
+curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTQyMjg3NTIsInVzZXJuYW1lIjoidGVzdEBlbWFpbC5jb20ifQ.W1cZ-aeju6AbHh6ppzvPNbp9ZXiT33gniP4Td3LVUFY" -X GET http://localhost:5000/api/v1/test

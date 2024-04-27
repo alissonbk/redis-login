@@ -11,8 +11,6 @@ services:
       - "5000:5000"
     volumes:
       - .:/app/api
-#    extra_hosts:
-#      - "host.docker.internal:host-gateway"
     depends_on:
       - redis
       - db

@@ -1,13 +1,13 @@
 package middleware
 
 import (
-	"com.github.alissonbk/go-rest-template/config"
+	"com.github.alissonbk/go-rest-template/injection"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
 )
 
-func AuthRequired(i *config.Injection) gin.HandlerFunc {
+func AuthRequired(i *injection.Injection) gin.HandlerFunc {
 	authService := i.NewAuthService()
 	userService := i.NewUserService()
 	return func(c *gin.Context) {

@@ -4,6 +4,8 @@ import (
 	"com.github.alissonbk/go-rest-template/app/constant"
 	"com.github.alissonbk/go-rest-template/app/exception"
 	"com.github.alissonbk/go-rest-template/app/repository"
+	"com.github.alissonbk/go-rest-template/config"
+	"context"
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/sirupsen/logrus"
@@ -15,6 +17,7 @@ import (
 
 type AuthService struct {
 	userRepository *repository.UserRepository
+	redisConfig    *config.Redis
 	secretKey      []byte
 	jwtExpiration  int
 }
@@ -46,6 +49,7 @@ func (as *AuthService) createToken(username string) (string, error) {
 		return "", err
 	}
 
+	as.storeClaimsRedis()
 	return tokenString, nil
 }
 
@@ -77,4 +81,21 @@ func (as *AuthService) Login(username string, passwd string) string {
 		exception.PanicException(constant.UnknownError, "could not create JWT token")
 	}
 	return tokenString
+}
+
+func (as *AuthService) storeClaimsRedis() {
+	fmt.Println("storeClaimsRedis...")
+	ctx := context.Background()
+	client := as.redisConfig.ConnectRedis()
+	err := client.Set(ctx, "foo", "bar", 0).Err()
+	if err != nil {
+		panic(err)
+	}
+
+	val, err := client.Get(ctx, "foo").Result()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("foo", val)
+	fmt.Println("ctx: ", ctx)
 }
