@@ -4,9 +4,7 @@ import (
 	"com.github.alissonbk/go-rest-template/app/model/dto"
 	"com.github.alissonbk/go-rest-template/config"
 	"com.github.alissonbk/go-rest-template/injection"
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"golang.org/x/net/context"
 	"net/http"
 	"strings"
 )
@@ -42,14 +40,12 @@ func AuthRequired(i *injection.Injection) gin.HandlerFunc {
 }
 
 func getUserRedis(email string) dto.UserDTO {
-	ctx := context.Background()
+	ctx := config.RedisContextGetInstance().Ctx
 	redisConfig := config.Redis{}
 	client := redisConfig.ConnectRedis()
 	hashSetIdentifier := "user-session-" + email
 
-	xd := client.HGetAll(ctx, hashSetIdentifier)
-	fmt.Println("session from redis: ", xd)
-	sessionUserMap := xd.Val()
+	sessionUserMap := client.HGetAll(ctx, hashSetIdentifier).Val()
 	userDTO := dto.UserDTO{Name: sessionUserMap["name"], Email: sessionUserMap["email"], Role: sessionUserMap["role"]}
 	return userDTO
 }

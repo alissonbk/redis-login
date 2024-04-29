@@ -1,9 +1,8 @@
 curl -X POST -d "{\"username\": \"test@email.com\", \"password\": \"1234\"}" http://localhost:5000/api/v1/login
 
-curl -X GET http://localhost:5000/api/v1/login/test
+curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTQ0MjI1NjAsInVzZXJuYW1lIjoidGVzdEBlbWFpbC5jb20ifQ.XOllMReag0SExorKuyHYwqJRFxEpfkG5pB33w-TvcIo" -X GET http://localhost:5000/api/v1/test
 
 curl -X GET http://localhost:5000/api/v1/user
 
 curl -X POST -d " {\"name\": \"Test User\", \"email\": \"test@email.com\", \"password\": \"1234\"} " http://localhost:5000/api/v1/user
 
-curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTQyNDEyMzIsInVzZXJuYW1lIjoidGVzdEBlbWFpbC5jb20ifQ.j5iOcjp_H4YLuTHi_D-er7HapuJH1AoStza6LAjEGzw" -X GET http://localhost:5000/api/v1/test

@@ -6,7 +6,6 @@ import (
 	"com.github.alissonbk/go-rest-template/app/model/entity"
 	"com.github.alissonbk/go-rest-template/app/repository"
 	"com.github.alissonbk/go-rest-template/config"
-	"context"
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/sirupsen/logrus"
@@ -62,7 +61,7 @@ func (as *AuthService) Login(username string, passwd string) string {
 		exception.PanicException(constant.UnknownError, "could not create JWT token")
 	}
 
-	err = as.storeSessionRedis(username, user)
+	err = as.storeSessionRedis(user.Email, user)
 	if err != nil {
 		logrus.Error(err)
 		exception.PanicException(constant.UnknownError, "could not save user session")
@@ -72,7 +71,7 @@ func (as *AuthService) Login(username string, passwd string) string {
 }
 
 func (as *AuthService) storeSessionRedis(email string, user entity.User) error {
-	ctx := context.Background()
+	ctx := config.RedisContextGetInstance().Ctx
 	client := as.redisConfig.ConnectRedis()
 	hashSetIdentifier := "user-session-" + email
 	for k, v := range as.userToMap(user) {
